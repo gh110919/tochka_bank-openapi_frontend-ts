@@ -1,11 +1,15 @@
+import { readFileSync } from "fs";
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import viteBasicSslPlugin from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig({
-  plugins: [react(), viteBasicSslPlugin()],
+  plugins: [(await import("@vitejs/plugin-react-swc")).default()],
+
   server: {
     host: "127.0.0.1",
     port: 443,
+    https: {
+      key: readFileSync("../env/private_key.pem"),
+      cert: readFileSync("../env/fullchain.pem"),
+    },
   },
 });
